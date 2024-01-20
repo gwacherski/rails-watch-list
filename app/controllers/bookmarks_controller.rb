@@ -1,17 +1,17 @@
 # app/controllers/bookmarks_controller.rb
 class BookmarksController < ApplicationController
-  before_action :set_list
+  before_action :set_list, only: [:new, :create]
   before_action :set_bookmark, only: [:destroy]
 
   def new
-    @bookmark = @list.bookmarks.build
+    @bookmark = Bookmark.new
   end
 
   def create
-    @bookmark = @list.bookmarks.build(bookmark_params)
-    puts "List ID: #{@list.id}"
+    @bookmark = Bookmark.new(bookmark_params)
+    @bookmark.list = @list
     if @bookmark.save
-      redirect_to @list, notice: 'Bookmark was successfully created.'
+      redirect_to list_path(@list), notice: 'Bookmark was successfully created.'
     else
       render 'new'
     end
@@ -19,7 +19,7 @@ class BookmarksController < ApplicationController
 
   def destroy
     @bookmark.destroy
-    redirect_to @list, notice: 'Bookmark was successfully destroyed.'
+    redirect_to list_path(@bookmark.list), notice: 'Bookmark was successfully destroyed.'
   end
 
   private
@@ -29,10 +29,10 @@ class BookmarksController < ApplicationController
   end
 
   def set_bookmark
-    @bookmark = @list.bookmarks.find(params[:id])
+    @bookmark = Bookmark.find(params[:id])
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:movie_id)
+    params.require(:bookmark).permit(:comment, :movie_id)
   end
 end
