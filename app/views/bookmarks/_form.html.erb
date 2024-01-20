@@ -1,0 +1,6 @@
+<%= form_with(model: [@list, @bookmark]) do |form| %>
+  <%= form.label :movie %>
+  <%= form.collection_select :movie_id, Movie.all, :id, :title %>
+
+  <%= form.submit %>
+<% end %>
