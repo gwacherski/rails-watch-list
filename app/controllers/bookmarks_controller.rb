@@ -13,7 +13,7 @@ class BookmarksController < ApplicationController
     if @bookmark.save
       redirect_to list_path(@list), notice: 'Bookmark was successfully created.'
     else
-      render 'new'
+      render :new, notice: 'Bookmark was not created.'
     end
   end
 
